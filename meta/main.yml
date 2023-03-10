@@ -5,7 +5,8 @@ dependencies: []
 
 galaxy_info:
   author: Tim Short
-  description: Install Bitwarden
+  description: Install self-hosted Bitwarden
+  galaxy_tags: [bitwarden]
   license: GPL v3
   min_ansible_version: TBC
   namespace: cabtech
