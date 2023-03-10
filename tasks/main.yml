@@ -1,0 +1,80 @@
+---
+# --------------------------------
+
+- name: "Dependencies"
+  ansible.builtin.apt:
+    name: "{{ bitwarden_pkg_dependencys }}"
+    state: present
+  become: true
+  tags: [ct-bitwarden]
+
+- name: "Main packages"
+  ansible.builtin.apt:
+    name: "{{ bitwarden_pkgs }}"
+    state: present
+  become: true
+  tags: [ct-bitwarden]
+
+- name: "User group"
+  ansible.builtin.group:
+    name: "{{ bitwarden_username }}"
+    state: present
+  become: true
+  tags: [ct-bitwarden]
+
+- name: "User account"
+  ansible.builtin.user:
+    append: true
+    comment: "Bitwarden"
+    groups: "{{ [bitwarden_username, 'docker'] | join(',') }}"
+    name: "{{ bitwarden_username }}"
+    shell: /bin/bash
+    state: present
+    system: true
+  become: true
+  tags: [ct-bitwarden]
+
+- name: "Directories"
+  ansible.builtin.file:
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+    owner: "{{ item.owner }}"
+    path: "{{ item.name }}"
+    state: directory
+  loop: "{{ bitwarden_dirs }}"
+  become: true
+  tags: [ct-bitwarden]
+
+- name: "Installer script"
+  ansible.builtin.copy:
+    dest: "{{ bitwarden_install_dir }}/bitwarden.sh"
+    group: "{{ bitwarden_username }}"
+    mode: "0755"
+    owner: "{{ bitwarden_username }}"
+    src: bitwarden.sh
+  become: true
+  tags: [ct-bitwarden]
+
+- name: "SMTP details (no_log)"
+  ansible.builtin.template:
+    dest: "{{ bitwarden_install_dir }}/smtp.env"
+    group: "{{ bitwarden_username }}"
+    mode: "0600"
+    owner: "{{ bitwarden_username }}"
+    src: smtp.env.j2
+  no_log: true
+  become: true
+  tags: [ct-bitwarden]
+
+- name: "Post-processing script"
+  ansible.builtin.template:
+    dest: "{{ bitwarden_install_dir }}/postprocess.sh"
+    group: "{{ bitwarden_username }}"
+    mode: "0700"
+    owner: "{{ bitwarden_username }}"
+    src: postprocess.sh.j2
+  become: true
+  tags: [ct-bitwarden]
+
+# --------------------------------
+...

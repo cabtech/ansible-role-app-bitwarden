@@ -1,0 +1,12 @@
+---
+# --------------------------------
+
+bitwarden_dirs:
+- {name: "{{ bitwarden_install_dir }}", group: "bitwarden", mode: "0700", owner: "bitwarden"}
+bitwarden_install_dir: /opt/bitwarden
+bitwarden_pkg_dependencys: ["ca-certificates", "curl", "docker", "docker-compose", "gnupg", "lsb-release"]
+bitwarden_pkgs: ["docker", "docker-compose"]
+bitwarden_username: bitwarden
+
+# --------------------------------
+...

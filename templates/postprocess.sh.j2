@@ -1,0 +1,19 @@
+#!/bin/bash
+
+fname={{ bitwarden_install_dir }}/bwdata/env/global.override.env
+tmpfile={{ bitwarden_install_dir }}/tmpfile
+
+cat $fname \
+| grep -v 'globalSettings__mail__smtp__host=' \
+| grep -v 'globalSettings__mail__smtp__username=' \
+| grep -v 'globalSettings__mail__smtp__password=' \
+| grep -v 'adminSettings__admins=' \
+> $tmpfile
+
+cat $tmpfile {{ bitwarden_install_dir }}/smtp.env > $fname
+shred -n 3 -uz $tmpfile
+chown nobody:nogroup $fname
+chmod 600 $fname
+{{ bitwarden_install_dir }}/bitwarden.sh restart
+
+exit 0

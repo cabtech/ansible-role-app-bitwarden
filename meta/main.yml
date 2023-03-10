@@ -1,0 +1,18 @@
+---
+# --------------------------------
+
+dependencies: []
+
+galaxy_info:
+  author: Tim Short
+  description: Install Bitwarden
+  license: GPL v3
+  min_ansible_version: TBC
+  namespace: cabtech
+  platforms:
+  - name: Ubuntu
+    versions: ["bionic", "focal", "jammy"]
+  role_name: ansible_role_app_bitwarden
+
+# --------------------------------
+...
